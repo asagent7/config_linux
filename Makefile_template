@@ -1,0 +1,43 @@
+CC = gcc
+LIBS = 
+
+INCDIR = inc
+OBJDIR = obj
+SRCDIR = src
+TARGETDIR = bin
+
+TARGET = $(TARGETDIR)/CDAM_KARD_APP
+
+CFILES = $(wildcard $(SRCDIR)/*.c)
+_COBJECTS = $(CFILES:.c=.o)
+_DEPS = $(CFILES:.c=.h)
+
+COBJECTS = $(patsubst $(SRCDIR)%.o,$(OBJDIR)%.o,$(_COBJECTS))
+DEPS = $(patsubst $(SRCDIR)%.h,$(INCDIR)%.h,$(_DEPS))
+
+CFLAGS =
+INCLUDES = -I$(INCDIR)
+
+default: all
+
+all: $(TARGET)
+
+$(TARGET): $(COBJECTS) | bin
+	$(CC) $(CFLAGS) -o $@ $(COBJECTS) 
+
+$(OBJDIR)/%.o: $(SRCDIR)/%.c $(DEPS) | obj
+	$(CC) $(CFLAGS) -c -o $@ $< $(INCLUDES)
+
+obj:
+	@mkdir -p $@
+
+bin:
+	@mkdir -p $@
+
+.PHONY: clean all default
+
+clean :
+	rm -rf $(OBJDIR) $(SRCDIR)/*~ *~
+	
+cleanall:
+	rm -rf $(OBJDIR) $(TARGETDIR) $(SRCDIR)/*~ *~
