@@ -36,7 +36,7 @@ set nocompatible
 
 " " set the runtime path for vundle
  set rtp+=~/.vim/bundle/Vundle.vim
-
+ set rtp+=~/.vim/bundle/vim-snippets
 " " start vundle environment
  call vundle#begin()
 
@@ -48,6 +48,12 @@ set nocompatible
  Plugin 'scrooloose/nerdtree'
  Plugin 'Xuyuanp/nerdtree-git-plugin'
  Plugin 'airblade/vim-gitgutter'
+ ""Plugin 'MarcWeber/vim-addon-mw-utils'
+ ""Plugin 'tomtom/tlib_vim'
+ ""Plugin 'garbas/vim-snipmate'
+ Plugin 'ervandew/supertab'
+ Plugin 'SirVer/ultisnips'
+ Plugin 'honza/vim-snippets'
 "
 " " to install a plugin add it here and run :PluginInstall.
 " " to update the plugins run :PluginInstall! or :PluginUpdate
@@ -63,8 +69,8 @@ call vundle#end()
  syntax on
 
 "Using the molokai colorscheme
-colorscheme molokai
-let g:molokai_original=1
+colorscheme jellybeans
+""let g:molokai_original=1
 
 "Set global configure file for YouCompleteMe
 let g:ycm_global_ycm_extra_conf = '~/.ycm_extra_conf.py'
@@ -72,6 +78,19 @@ let g:ycm_confirm_extra_conf=0
 let g:ycm_add_preview_to_completeopt=1
 let g:ycm_autoclose_preview_window_after_completion=1
 let g:ycm_autoclose_preview_window_after_insertion=1
+
+""make YCM compatible with UltiSnips (using supertab)
+let g:ycm_key_list_select_completion = ['<C-n>', '<Down>']
+let g:ycm_key_list_previous_completion = ['<C-p>', '<Up>']
+let g:SuperTabDefaultCompletionType = '<C-n>'
+
+" " better key bindings for UltiSnipsExpandTrigger
+let g:UltiSnipsExpandTrigger = "<tab>"
+let g:UltiSnipsJumpForwardTrigger = "<tab>"
+let g:UltiSnipsJumpBackwardTrigger = "<s-tab>"
+""let g:UltiSnipsExpandTrigger="<C-s>"
+""let g:UltiSnipsJumpForwardTrigger="<C-b>"
+""let g:UltiSnipsJumpBackwardTrigger="<C-z>"
 "
 " }}
 " }"
