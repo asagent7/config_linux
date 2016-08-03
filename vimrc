@@ -45,20 +45,21 @@ set nocompatible
 " " let Vundle manage Vundle (this is required)
  Plugin 'VundleVim/Vundle.vim'
  Plugin 'Valloric/YouCompleteMe'
- Plugin 'scrooloose/nerdtree'
- Plugin 'Xuyuanp/nerdtree-git-plugin'
  Plugin 'airblade/vim-gitgutter'
- ""Plugin 'MarcWeber/vim-addon-mw-utils'
- ""Plugin 'tomtom/tlib_vim'
- ""Plugin 'garbas/vim-snipmate'
  Plugin 'ervandew/supertab'
  Plugin 'SirVer/ultisnips'
  Plugin 'honza/vim-snippets'
+ Plugin 'vim-airline/vim-airline'
+ Plugin 'vim-airline/vim-airline-themes'
+ Plugin 'tpope/vim-fugitive'
+ Plugin 'ntpeters/vim-better-whitespace'
+ Plugin 'Shougo/vimproc.vim'
+ Plugin 'Shougo/unite.vim'
 "
 " " to install a plugin add it here and run :PluginInstall.
 " " to update the plugins run :PluginInstall! or :PluginUpdate
 " " to delete a plugin remove it here and run :PluginClean
-" " 
+" "
 " " YOUR LIST OF PLUGINS GOES HERE LIKE THIS:
 "
 " " add plugins before this
@@ -114,8 +115,8 @@ set showmode
 set autoindent
 set smartindent
 set cindent
-set tabstop=4 
-set shiftwidth=4    " Using shiftwidth 4 for indentation 
+set tabstop=4
+set shiftwidth=4    " Using shiftwidth 4 for indentation
 set expandtab       " Using softtab
 set nobackup        " No backup to be generated
 set noswapfile
@@ -124,7 +125,8 @@ set cursorline      " Highlight the current line
 set nowrap
 set textwidth=79    " Max text width is 79 and colorcolumn to check so
 set formatoptions=qrn1
-set statusline=%<%F%h%m%r\ [%{&ff}]\ (%{strftime(\"%H:%M\ %d/%m/%Y\",getftime(expand(\"%:p\")))})%=%l,%c%V\ %P
+set laststatus=2
+""set statusline=%<%F%h%m%r\ [%{&ff}]\ (%{strftime(\"%H:%M\ %d/%m/%Y\",getftime(expand(\"%:p\")))})%=%l,%c%V\ %P
 
 try
         set colorcolumn=80
@@ -143,33 +145,48 @@ au Syntax * RainbowParenthesesLoadSquare
 au Syntax * RainbowParenthesesLoadBraces
 
 " Enable NERDTree on enter and shift focus to file
-autocmd vimenter * NERDTree | wincmd p
+"autocmd vimenter * NERDTree | wincmd p
 
 " Open NERDTree in empty file
-autocmd StdinReadPre * let s:std_in=1
+"autocmd StdinReadPre * let s:std_in=1
 
 " Close NERDTree automatically
-autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
-
-" nerdtree-git-plugin configuration
-let g:NERDTreeIndicatorMapCustom = {
-    \ "Modified"  : "✹",
-    \ "Staged"    : "✚",
-    \ "Untracked" : "✭",
-    \ "Renamed"   : "➜",
-    \ "Unmerged"  : "═",
-    \ "Deleted"   : "✖",
-    \ "Dirty"     : "✗",
-    \ "Clean"     : "✔︎",
-    \ "Unknown"   : "?"
-    \ }
+"autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+"autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 
 " Map commands to move between split windows
 map <C-h> <C-w>h
 map <C-j> <C-w>j
 map <C-k> <C-w>k
 map <C-l> <C-w>l
+nnoremap <C-Left> :tabprevious<CR>
+nnoremap <C-Right> :tabnext<CR>
+
+if !exists('g:airline_symbols')
+      let g:airline_symbols = {}
+endif
+let g:airline_symbols.space = "\ua0"
+
+let g:airline#extensions#hunks#enabled=1
+let g:airline#extensions#branch#enabled=1
+let g:airline#extensions#tabline#show_tabs = 1
+let g:airline#extensions#tabline#buffer_min_count = 0
+let g:airline_section_y = '%{strftime("%c")}'
+let g:airline_left_sep = ''
+let g:airline_right_sep = ''
+
+let g:unite_source_history_yank_enable = 1
+try
+  let g:unite_source_rec_async_command='ag --nocolor --nogroup -g ""'
+  call unite#filters#matcher_default#use(['matcher_fuzzy'])
+catch
+endtry
+" search a file in the filetree
+nnoremap <space>r :<C-u>Unite -start-insert file/async<cr>
+nnoremap <space>f :<C-u>Unite -start-insert file<cr>
+" reset not it is <C-l> normally
+:nnoremap <space><space> <Plug>(unite_restart)
+
 
 set backspace=indent,eol,start
 set dictionary=/usr/share/dict/words
@@ -183,32 +200,33 @@ filetype plugin on
 ""set omnifunc=syntaxcomplete#Complete
 " Changing behaviour of ENTER when popup menu is on
 :inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+
 source ~/.vim/plugin/matchit.vim
 " Configuring matchit for verilog syntax
 if exists('loaded_matchit')
-	let b:match_ignorecase=0
+    let b:match_ignorecase=0
 	let b:match_words=
-	  \ '\<begin\>:\<end\>,' .
-	  \ '\<if\>:\<else\>,' .
-	  \ '\<module\>:\<endmodule\>,' .
-	  \ '\<class\>:\<endclass\>,' .
-	  \ '\<program\>:\<endprogram\>,' .
-	  \ '\<clocking\>:\<endclocking\>,' .
-	  \ '\<property\>:\<endproperty\>,' .
-	  \ '\<sequence\>:\<endsequence\>,' .
-	  \ '\<package\>:\<endpackage\>,' .
-	  \ '\<covergroup\>:\<endgroup\>,' .
-	  \ '\<primitive\>:\<endprimitive\>,' .
-	  \ '\<specify\>:\<endspecify\>,' .
-	  \ '\<generate\>:\<endgenerate\>,' .
-	  \ '\<interface\>:\<endinterface\>,' .
-	  \ '\<function\>:\<endfunction\>,' .
-	  \ '\<task\>:\<endtask\>,' .
-	  \ '\<case\>\|\<casex\>\|\<casez\>:\<endcase\>,' .
-	  \ '\<fork\>:\<join\>\|\<join_any\>\|\<join_none\>,' .
-	  \ '`ifdef\>:`else\>:`endif\>,'
+         \ '\<begin\>:\<end\>,' .
+         \ '\<if\>:\<else\>,' .
+         \ '\<module\>:\<endmodule\>,' .
+         \ '\<class\>:\<endclass\>,' .
+         \ '\<program\>:\<endprogram\>,' .
+         \ '\<clocking\>:\<endclocking\>,' .
+         \ '\<property\>:\<endproperty\>,' .
+         \ '\<sequence\>:\<endsequence\>,' .
+         \ '\<package\>:\<endpackage\>,' .
+         \ '\<covergroup\>:\<endgroup\>,' .
+         \ '\<primitive\>:\<endprimitive\>,' .
+         \ '\<specify\>:\<endspecify\>,' .
+         \ '\<generate\>:\<endgenerate\>,' .
+         \ '\<interface\>:\<endinterface\>,' .
+         \ '\<function\>:\<endfunction\>,' .
+         \ '\<task\>:\<endtask\>,' .
+         \ '\<case\>\|\<casex\>\|\<casez\>:\<endcase\>,' .
+         \ '\<fork\>:\<join\>\|\<join_any\>\|\<join_none\>,' .
+         \ '`ifdef\>:`else\>:`endif\>,'
 endif
 " Source a global configuration file if available
 if filereadable("/etc/vim/vimrc.local")
-  source /etc/vim/vimrc.local
+    source /etc/vim/vimrc.local
 endif
