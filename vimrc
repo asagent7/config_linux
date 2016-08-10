@@ -133,7 +133,7 @@ try
     catch
 endtry
 " Colorcolumn color to match the colorscheme
-highlight ColorColumn ctermbg=100
+highlight ColorColumn ctermbg=236
 
 " Save file on no focus
 au FocusLost * :wa
