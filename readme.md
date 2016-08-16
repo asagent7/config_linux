@@ -18,6 +18,6 @@ The makefile template is one I use for my projects.
 1. Get [Vundle] (https://github.com/VundleVim/Vundle.vim).
 2. Get [rainbow parantheses] (http://www.vim.org/scripts/script.php?script_id=1561). Some other similar plugins are available.
 3. Get [matchit] (http://www.vim.org/scripts/script.php?script_id=39). I use it solely for verilog. Can be left out.
-4. Install YouCompleteMe as instructed. Use python2.7 to avoid some headaches.
-5. Run PluginInstall. This should do.
+4. Run PluginInstall. This should do.
+5. Install YouCompleteMe as instructed. Use python2.7 to avoid some headaches.
 6. Feel free to experiment.
