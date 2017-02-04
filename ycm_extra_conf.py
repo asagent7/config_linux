@@ -30,9 +30,8 @@ flags = [
 '-Wall',
 '-Wextra',
 '-Werror',
-'-pedantic',
 '-isystem', '/usr/include',
-'-isystem', '/usr/lib/gcc/x86_64-linux-gnu/4.8.4/include'
+'-isystem', '/usr/lib/gcc/x86_64-linux-gnu/5.4.0/include'
 # std is required
 # clang won't know which language to use compiling headers
 '-std=c99',

@@ -31,30 +31,30 @@ set nocompatible
 
 " " vundle needs filtype plugins off
 " " i turn it on later
- filetype plugin indent off
- syntax off
+filetype plugin indent off
+syntax off
 
 " " set the runtime path for vundle
- set rtp+=~/.vim/bundle/Vundle.vim
- set rtp+=~/.vim/bundle/vim-snippets
+set rtp+=~/.vim/bundle/Vundle.vim
+set rtp+=~/.vim/bundle/vim-snippets
 " " start vundle environment
- call vundle#begin()
+call vundle#begin()
 
 " " list of plugins {
 "" {2
 " " let Vundle manage Vundle (this is required)
- Plugin 'VundleVim/Vundle.vim'
- Plugin 'Valloric/YouCompleteMe'
- Plugin 'airblade/vim-gitgutter'
- Plugin 'ervandew/supertab'
- Plugin 'SirVer/ultisnips'
- Plugin 'honza/vim-snippets'
- Plugin 'vim-airline/vim-airline'
- Plugin 'vim-airline/vim-airline-themes'
- Plugin 'tpope/vim-fugitive'
- Plugin 'ntpeters/vim-better-whitespace'
- Plugin 'Shougo/vimproc.vim'
- Plugin 'Shougo/unite.vim'
+Plugin 'VundleVim/Vundle.vim'
+Plugin 'Valloric/YouCompleteMe'
+Plugin 'airblade/vim-gitgutter'
+Plugin 'ervandew/supertab'
+Plugin 'SirVer/ultisnips'
+Plugin 'honza/vim-snippets'
+Plugin 'vim-airline/vim-airline'
+Plugin 'vim-airline/vim-airline-themes'
+Plugin 'tpope/vim-fugitive'
+Plugin 'ntpeters/vim-better-whitespace'
+Plugin 'Shougo/vimproc.vim'
+Plugin 'Shougo/unite.vim'
 "
 " " to install a plugin add it here and run :PluginInstall.
 " " to update the plugins run :PluginInstall! or :PluginUpdate
@@ -66,8 +66,8 @@ set nocompatible
 call vundle#end()
 "
 " " now (after vundle finished) it is save to turn filetype plugins on
- filetype plugin indent on
- syntax on
+filetype plugin indent on
+syntax on
 
 "Using the molokai colorscheme
 colorscheme jellybeans
@@ -129,9 +129,11 @@ set laststatus=2
 ""set statusline=%<%F%h%m%r\ [%{&ff}]\ (%{strftime(\"%H:%M\ %d/%m/%Y\",getftime(expand(\"%:p\")))})%=%l,%c%V\ %P
 
 try
-        set colorcolumn=80
-    catch
+    set colorcolumn=80
+catch
 endtry
+
+au FileType * setlocal formatoptions+=t
 " Colorcolumn color to match the colorscheme
 highlight ColorColumn ctermbg=236
 
@@ -159,11 +161,22 @@ map <C-h> <C-w>h
 map <C-j> <C-w>j
 map <C-k> <C-w>k
 map <C-l> <C-w>l
+imap <silent> <C-c> <Esc>yyi
+vmap <silent> <C-c> <Esc>y
+imap <silent> <C-S-v> <Esc>p$i
+nnoremap <silent> <Esc><Esc> :noh<CR>
+inoremap <silent> <C-f> <Esc>/
+inoremap <C-Left> <Esc>:tabprevious<CR>
+inoremap <C-Right> <Esc>:tabnext<CR>
 nnoremap <C-Left> :tabprevious<CR>
 nnoremap <C-Right> :tabnext<CR>
 
+imap <S-Tab> <C-d>
+nmap <Tab> >>
+nmap <S-Tab> <<
+
 if !exists('g:airline_symbols')
-      let g:airline_symbols = {}
+    let g:airline_symbols = {}
 endif
 let g:airline_symbols.space = "\ua0"
 
@@ -177,8 +190,8 @@ let g:airline_right_sep = ''
 
 let g:unite_source_history_yank_enable = 1
 try
-  let g:unite_source_rec_async_command='ag --nocolor --nogroup -g ""'
-  call unite#filters#matcher_default#use(['matcher_fuzzy'])
+    let g:unite_source_rec_async_command='ag --nocolor --nogroup -g ""'
+    call unite#filters#matcher_default#use(['matcher_fuzzy'])
 catch
 endtry
 " search a file in the filetree
@@ -192,11 +205,9 @@ set backspace=indent,eol,start
 set dictionary=/usr/share/dict/words
 inoremap ( ()<Esc>i
 inoremap [ []<Esc>i
-inoremap < <><Esc>i
 inoremap { {<CR>}<Esc>O
 inoremap ' ''<Esc>i
 inoremap " ""<Esc>i
-filetype plugin on
 ""set omnifunc=syntaxcomplete#Complete
 " Changing behaviour of ENTER when popup menu is on
 :inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
@@ -205,26 +216,26 @@ source ~/.vim/plugin/matchit.vim
 " Configuring matchit for verilog syntax
 if exists('loaded_matchit')
     let b:match_ignorecase=0
-	let b:match_words=
-         \ '\<begin\>:\<end\>,' .
-         \ '\<if\>:\<else\>,' .
-         \ '\<module\>:\<endmodule\>,' .
-         \ '\<class\>:\<endclass\>,' .
-         \ '\<program\>:\<endprogram\>,' .
-         \ '\<clocking\>:\<endclocking\>,' .
-         \ '\<property\>:\<endproperty\>,' .
-         \ '\<sequence\>:\<endsequence\>,' .
-         \ '\<package\>:\<endpackage\>,' .
-         \ '\<covergroup\>:\<endgroup\>,' .
-         \ '\<primitive\>:\<endprimitive\>,' .
-         \ '\<specify\>:\<endspecify\>,' .
-         \ '\<generate\>:\<endgenerate\>,' .
-         \ '\<interface\>:\<endinterface\>,' .
-         \ '\<function\>:\<endfunction\>,' .
-         \ '\<task\>:\<endtask\>,' .
-         \ '\<case\>\|\<casex\>\|\<casez\>:\<endcase\>,' .
-         \ '\<fork\>:\<join\>\|\<join_any\>\|\<join_none\>,' .
-         \ '`ifdef\>:`else\>:`endif\>,'
+    let b:match_words=
+                \ '\<begin\>:\<end\>,' .
+                \ '\<if\>:\<else\>,' .
+                \ '\<module\>:\<endmodule\>,' .
+                \ '\<class\>:\<endclass\>,' .
+                \ '\<program\>:\<endprogram\>,' .
+                \ '\<clocking\>:\<endclocking\>,' .
+                \ '\<property\>:\<endproperty\>,' .
+                \ '\<sequence\>:\<endsequence\>,' .
+                \ '\<package\>:\<endpackage\>,' .
+                \ '\<covergroup\>:\<endgroup\>,' .
+                \ '\<primitive\>:\<endprimitive\>,' .
+                \ '\<specify\>:\<endspecify\>,' .
+                \ '\<generate\>:\<endgenerate\>,' .
+                \ '\<interface\>:\<endinterface\>,' .
+                \ '\<function\>:\<endfunction\>,' .
+                \ '\<task\>:\<endtask\>,' .
+                \ '\<case\>\|\<casex\>\|\<casez\>:\<endcase\>,' .
+                \ '\<fork\>:\<join\>\|\<join_any\>\|\<join_none\>,' .
+                \ '`ifdef\>:`else\>:`endif\>,'
 endif
 " Source a global configuration file if available
 if filereadable("/etc/vim/vimrc.local")
